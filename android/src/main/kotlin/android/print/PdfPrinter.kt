@@ -47,7 +47,7 @@ private fun getOutputFile(path: File, fileName: String): ParcelFileDescriptor {
         path.mkdirs()
     }
 
-    File(path, fileName).let{
+    File(path, fileName).let {
         it.createNewFile()
         return ParcelFileDescriptor.open(it, ParcelFileDescriptor.MODE_READ_WRITE)
     }

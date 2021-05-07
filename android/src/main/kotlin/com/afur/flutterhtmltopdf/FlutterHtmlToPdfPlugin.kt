@@ -26,16 +26,18 @@ class FlutterHtmlToPdfPlugin(private val registrar: Registrar) : MethodCallHandl
 
     private fun convertHtmlToPdf(call: MethodCall, result: Result) {
         val htmlFilePath = call.argument<String>("htmlFilePath")
+        val portraitOrientation: Boolean = call.argument<Boolean>("") ?: true
 
-        HtmlToPdfConverter().convert(htmlFilePath!!, registrar.activity(), object : HtmlToPdfConverter.Callback {
-            override fun onSuccess(filePath: String) {
-                result.success(filePath)
-            }
+        HtmlToPdfConverter().convert(htmlFilePath!!,
+            registrar.activity(), portraitOrientation, object : HtmlToPdfConverter.Callback {
+                override fun onSuccess(filePath: String) {
+                    result.success(filePath)
+                }
 
-            override fun onFailure() {
-                result.error("ERROR", "Unable to convert html to pdf document!", "")
-            }
-        })
+                override fun onFailure() {
+                    result.error("ERROR", "Unable to convert html to pdf document!", "")
+                }
+            })
     }
 }
 
