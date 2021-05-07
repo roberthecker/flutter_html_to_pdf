@@ -17,12 +17,15 @@ class FlutterHtmlToPdf {
     required String htmlContent,
     required String targetDirectory,
     required String targetName,
+    bool portraitOrientation = true,
   }) async {
     final temporaryCreatedHtmlFile =
         await File('$targetDirectory/$targetName.html')
             .writeAsString(htmlContent);
-    final generatedPdfFilePath =
-        await _convertFromHtmlFilePath(temporaryCreatedHtmlFile.path);
+    final generatedPdfFilePath = await _convertFromHtmlFilePath(
+      temporaryCreatedHtmlFile.path,
+      portraitOrientation: portraitOrientation,
+    );
     final generatedPdfFile = FileUtils.copyAndDeleteOriginalFile(
         generatedPdfFilePath, targetDirectory, targetName);
     temporaryCreatedHtmlFile.delete();
@@ -38,8 +41,12 @@ class FlutterHtmlToPdf {
     required File htmlFile,
     required String targetDirectory,
     required String targetName,
+    bool portraitOrientation = true,
   }) async {
-    final generatedPdfFilePath = await _convertFromHtmlFilePath(htmlFile.path);
+    final generatedPdfFilePath = await _convertFromHtmlFilePath(
+      htmlFile.path,
+      portraitOrientation: portraitOrientation,
+    );
     final generatedPdfFile = FileUtils.copyAndDeleteOriginalFile(
         generatedPdfFilePath, targetDirectory, targetName);
 
