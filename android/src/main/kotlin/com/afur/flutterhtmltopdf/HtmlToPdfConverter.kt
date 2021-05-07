@@ -46,13 +46,11 @@ class HtmlToPdfConverter {
     ) {
         val path = activity.applicationContext.filesDir
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
             val attributes = PrintAttributes.Builder()
-                .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                .setMediaSize(if(portraitOrientation) PrintAttributes.MediaSize.ISO_A4.asPortrait()
+                                else PrintAttributes.MediaSize.ISO_A4.asLandscape())
                 .setResolution(PrintAttributes.Resolution("pdf", "pdf", 600, 600))
                 .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
-                .setDuplexMode(if (portraitOrientation) PrintAttributes.DUPLEX_MODE_LONG_EDGE
-                                else PrintAttributes.DUPLEX_MODE_SHORT_EDGE)
                 .build()
 
             val printer = PdfPrinter(attributes)
