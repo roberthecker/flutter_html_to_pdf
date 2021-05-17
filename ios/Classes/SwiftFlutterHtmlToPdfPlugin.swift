@@ -17,6 +17,7 @@ public class SwiftFlutterHtmlToPdfPlugin: NSObject, FlutterPlugin{
     case "convertHtmlToPdf":
         let args = call.arguments as? [String: Any]
         let htmlFilePath = args!["htmlFilePath"] as? String
+        let portraitOrientation = args!["portraitOrientation"] as! Bool
         
         // !!! this is workaround for issue with rendering PDF images on iOS !!!
         let viewControler = UIApplication.shared.delegate?.window?!.rootViewController
@@ -31,7 +32,8 @@ public class SwiftFlutterHtmlToPdfPlugin: NSObject, FlutterPlugin{
         urlObservation = wkWebView.observe(\.isLoading, changeHandler: { (webView, change) in
             // this is workaround for issue with loading local images
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                let convertedFileURL = PDFCreator.create(printFormatter: self.wkWebView.viewPrintFormatter())
+                
+                let convertedFileURL = PDFCreator.create(printFormatter: self.wkWebView.viewPrintFormatter(), isPortrait: portraitOrientation)
                 let convertedFilePath = convertedFileURL.absoluteString.replacingOccurrences(of: "file://", with: "") // return generated pdf path
                 if let viewWithTag = viewControler?.view.viewWithTag(100) {
                     viewWithTag.removeFromSuperview() // remove hidden webview when pdf is generated
